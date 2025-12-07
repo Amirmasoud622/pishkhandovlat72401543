@@ -1,0 +1,73 @@
+$path = "$env:USERPROFILE\Desktop\pishkhan-site"
+New-Item -ItemType Directory -Force -Path "$path\src" | Out-Null
+New-Item -ItemType Directory -Force -Path "$path\public\images" | Out-Null
+
+# package.json
+@'
+{
+  "name": "dafatr-pishkhan-72401543",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
+  }
+}
+'@ | Set-Content -Path "$path\package.json" -Encoding UTF8
+
+# vite.config.js
+@'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  server: { port: 3000 }
+});
+'@ | Set-Content "$path\vite.config.js"
+
+# index.html
+@'
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>دفتر پیشخوان دولت — کد ۷۲۴۰۱۵۴۳</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
+'@ | Set-Content "$path\index.html"
+
+# src/main.jsx
+@'
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App";
+
+createRoot(document.getElementById("root")).render(<App />);
+'@ | Set-Content "$path\src\main.jsx"
+
+# src/App.jsx (کل سایت آماده)
+@'
+YOUR_APP_CODE_WILL_BE_INSERTED_HERE
+'@ | Set-Content "$path\src\App.jsx"
+
+# README
+"این پروژه آماده آپلود در Vercel است." | Set-Content "$path\README.md"
+
+# ایجاد ZIP
+Compress-Archive -Path "$path\*" -DestinationPath "$env:USERPROFILE\Desktop\pishkhan-site.zip" -Force
+
+Write-Output "DONE! فایل ZIP روی Desktop ساخته شد."
